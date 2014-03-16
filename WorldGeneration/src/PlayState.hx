@@ -26,7 +26,7 @@ class PlayState extends Sprite{
 		
 		keys = new KeyboardUtil();
 		player = new ST_Sprite();
-		player.setBitmap("img/playerLegs.png");
+		player.setBitmap("img/playerHead.png");
 		terrain = new ST_Sprite();
 		terrain.setBitmap("img/terrain.png");
 		addChild(terrain);
@@ -45,9 +45,10 @@ class PlayState extends Sprite{
 		}if (keys.getLastKeyUp() == "D") {
 			player.x += 1;
 		}
-		
-		
-		trace(ST_Collision.checkCollision(player, terrain));
+		//if(keys.getLastKeyUp() == "SPACE"){
+			trace(ST_Collision.checkCollision(player, terrain, 200));
+		//}
+		//trace(ST_Collision.checkCollision(player, terrain));
 	}
 	
 	public function draw() {

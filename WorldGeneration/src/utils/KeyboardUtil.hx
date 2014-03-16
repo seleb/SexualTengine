@@ -15,7 +15,9 @@ class KeyboardUtil
 	private var pressedKeys:Map<Int,Int>;
     private var lastKeyUp:Dynamic;
 	
-	public static var keyCodes:Map < Int, String > = [83=>"S", 68=>"D", 65=>"A", 87=>"W"];
+	public static var keyCodes:Map < Int, String > = [
+	83 => "S", 68 => "D", 65 => "A", 87 => "W",
+	32=>"SPACE"];
 	
 	
 	public function new() 
