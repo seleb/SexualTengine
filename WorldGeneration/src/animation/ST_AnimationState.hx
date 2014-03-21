@@ -8,12 +8,12 @@ package animation;
 import flash.display.*;
 import flash.events.*;
 
-class AnimationState
+class ST_AnimationState
 {
 	
-	private var frames:Array<Int>;
+	public var frames:Array<Int>;
 	private var currentFrame:Int;
-	private var frameRate:Int;
+	public var frameRate:Int;
 	private var frameCounter:Int;
 
 	public function new(framePass:Array<Int>, frameRatePass:Int) 

@@ -2,6 +2,7 @@ package ;
 import flash.display.Bitmap;
 import flash.display.Sprite;
 import openfl.Assets;
+import animation.ST_AnimationManager;
 
 /**
  * ...
@@ -9,6 +10,7 @@ import openfl.Assets;
  */
 class ST_Sprite extends Sprite{
 	private var bitmap:Bitmap;
+	public var animation:ST_AnimationManager;
 	
 	public function new(?_bitmap:String){
 		super();
@@ -18,6 +20,7 @@ class ST_Sprite extends Sprite{
 		}else {
 			bitmap = new Bitmap();
 		}
+		animation = new ST_AnimationManager(this.graphics);
 	}
 	
 	
