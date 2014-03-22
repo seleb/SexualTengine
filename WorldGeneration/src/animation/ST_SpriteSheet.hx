@@ -9,8 +9,7 @@ import flash.display.Bitmap;
  * ...
  * @author Ryan
  */
-class ST_SpriteSheet extends Tilesheet
-{
+class ST_SpriteSheet extends Tilesheet{
 
 	public var animationStates:Map<String, ST_AnimationState>;
 	public var currentState:ST_AnimationState;
@@ -18,6 +17,7 @@ class ST_SpriteSheet extends Tilesheet
 	private var imageHeight:Int;
 	private var addedTiles:Int;
 	
+	/** No docs yet */
 	public function new(_bitmapPath:String) 
 	{
 		super(Assets.getBitmapData(_bitmapPath));
@@ -27,6 +27,7 @@ class ST_SpriteSheet extends Tilesheet
 		animationStates = new Map();
 	}
 	
+	/** No docs yet */
 	public function addAnimationState(_name:String, _frames:Array<Int>, _frameRate:Int, _frameWidth:Int, _frameHeight:Int):Void
 	{
 		var frameRects:Array<Rectangle> = ST_SpriteSheetHandler.getSpriteArray(imageWidth,imageHeight,_frameWidth,_frameHeight,_frames);

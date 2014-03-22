@@ -16,6 +16,7 @@ class ST_AnimationState
 	public var frameRate:Int;
 	private var frameCounter:Int;
 
+	/** No docs yet */
 	public function new(framePass:Array<Int>, frameRatePass:Int) 
 	{
 		frames = framePass;
@@ -24,6 +25,7 @@ class ST_AnimationState
 		frameCounter = 0;
 	}
 	
+	/** No docs yet */
 	public function getCurrentFrame()
 	{
 		frameCounter++;
@@ -41,6 +43,7 @@ class ST_AnimationState
 		return frames[currentFrame];
 	}
 	
+	/** No docs yet */
 	public function setCurrentFrame(_frame:Int) {
 		currentFrame = _frame;
 		frameCounter = 0;

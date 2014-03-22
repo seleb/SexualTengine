@@ -10,21 +10,18 @@ import utils.PixelArray;
 
 import utils.Pixel;
 import utils.ST_Collision;
-/**
- * ...
- * @author Sean
- */
+
 class PlayState extends Sprite{
 	public var playing = true;
 	private var player:ST_Sprite;
 	private var terrain:ST_Sprite;
-	private var keys:KeyboardUtil;
 	
 	
 	public function new() {
 		super();
 		
-		keys = new KeyboardUtil();
+		var keys:KeyboardUtil = new KeyboardUtil();
+		
 		player = new ST_Sprite();
 		player.setBitmap("img/playerHead.png");
 		player.animation.addSpitesheet("img/spritesheet.png", "main", true);
@@ -37,32 +34,27 @@ class PlayState extends Sprite{
 		addChild(player);
 	}
 	
-	
 	public function update() {
-		//trace(keys.getLastKeyUp());
-		if (keys.getLastKeyUp() == "S") {
+		if (KeyboardUtil.isPressed(["S","DOWN"])) {
 			player.y += 1;
 			player.animation.pauseAnimation();
-		}if (keys.getLastKeyUp() == "W") {
+		}if (KeyboardUtil.isPressed(["W","UP"])) {
 			player.y -= 1;
 			player.animation.playFrom(6);
-		}if (keys.getLastKeyUp() == "A") {
+		}if (KeyboardUtil.isPressed(["A","LEFT"])) {
 			player.x -= 1;
 			player.animation.playAnimation();
-		}if (keys.getLastKeyUp() == "D") {
+		}if (KeyboardUtil.isPressed(["D","RIGHT"])) {
 			player.x += 1;
-		}
-		player.animation.draw();
-		//if(keys.getLastKeyUp() == "SPACE"){
+		}if (KeyboardUtil.isJustPressed(["SPACE"])) {
 			trace(ST_Collision.checkCollision(player, terrain, 200));
-		//}
-		//trace(ST_Collision.checkCollision(player, terrain));
+		}
+		
+		player.animation.draw();
 		trace(player.animation.getLargestBoundForStateByWidth("main", "test"));
 	}
 	
 	public function draw() {
-		
-		
 		/*for (i in 0...this.numChildren) {
 			var child = this.getChildAt(i);
 			

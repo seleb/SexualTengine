@@ -19,18 +19,20 @@ import openfl.gl.GLTexture;
 
 
 class ST_AnimationManager{
-
+	
 	private var graphics:Graphics;
 	private var currentSpriteSheet:ST_SpriteSheet;
-	private var play:Bool;
+	public var play:Bool;
 	public  var spriteSheets:Map<String,ST_SpriteSheet>;
 	
+	/** No docs yet */
 	public function new(_graphics:Graphics) {
 		graphics = _graphics;
 		spriteSheets = new Map();
 		play = true;
 	}
 	
+	/** No docs yet */
 	public function addSpitesheet(_bitmapPath:String, _name:String, ?_setAsCurrent:Bool = false) {
 		spriteSheets.set(_name, new ST_SpriteSheet(_bitmapPath));
 		if (_setAsCurrent) {
@@ -38,15 +40,18 @@ class ST_AnimationManager{
 		}
 	}
 	
+	/** No docs yet */
 	public function setCurrentSpriteSheet(_name:String) {
 		currentSpriteSheet = spriteSheets.get(_name);
 	}
 	
+	/** No docs yet */
 	public function addAnimationState(_spriteSheet:String, _stateName:String, _frames:Array<Int>, _frameRate:Int, _frameWdth:Int, _frameHeight:Int):Void
 	{	
 		spriteSheets.get(_spriteSheet).addAnimationState(_stateName, _frames, _frameRate, _frameWdth, _frameHeight);	
 	}
 	
+	/** No docs yet */
 	public function setAnimationState(_stateName:String)
 	{
 		if (currentSpriteSheet.currentState != null && currentSpriteSheet.currentState != currentSpriteSheet.animationStates.get(_stateName))
@@ -56,7 +61,7 @@ class ST_AnimationManager{
 		currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName); 
 	}
 	
-	/*
+	/** 
 	 * This method is used to draw the framw from the current sprite sheet's current 
 	 * animation state. Each time we call draw we clear the graphics otherwise the 
 	 * sprites will just be added on top.
@@ -70,8 +75,8 @@ class ST_AnimationManager{
 		}
 	}
 	
-	/*
-	 * This method is used to pause the current animation state at the given frame
+	/** 
+	 * Pauses the current animation state at the given frame
 	 * 
 	 * @Param _frame The frame to pause at - 0 based
 	 */
@@ -81,27 +86,27 @@ class ST_AnimationManager{
 		play = false;
 	}
 	
+	/** Pauses the animation manager, preventing frame updates */
 	public function pauseAnimation() {
 		play = false;
 	}
 	
-	/*
-	 * Sets the animation manager to play causing frame updates to occur 
-	 */
+	/** Sets the animation manager to play, causing frame updates to occur */
 	public function playAnimation() {
 		play = true;
 	}
 	
-	/*
-	 * Pauses the animation manage causing frame updates to not be made 
+	/** 
+	 * Plays the current animation state at the given frame
+	 * 
+	 * @Param _frame The frame to pause at - 0 based
 	 */
 	public function playFrom(_frame:Int) {
 		play = true;
 		currentSpriteSheet.currentState.setCurrentFrame(_frame);
 	}
 	
-	/*
-	 * Selects a sprite sheet and animation state, Sets these to the current sprite sheet and 
+	/** Selects a sprite sheet and animation state, Sets these to the current sprite sheet and 
 	 * animation state and plays from the specified frame.
 	 * 
 	 * @param _spriteSheetName The name of the spriteSheet to play from
@@ -115,10 +120,12 @@ class ST_AnimationManager{
 		currentSpriteSheet.currentState.setCurrentFrame(_frame);
 	}
 	
+	/** No docs yet */
 	public function getCurrentFrameBounds():Rectangle {
 		return currentSpriteSheet.getTileRect(currentSpriteSheet.currentState.getCurrentFrame());
 	}
 	
+	/** No docs yet */
 	public function getLargestBoundForStateByWidth(_spiteSheetName:String,_name:String):Rectangle{
 		var tempState:ST_AnimationState = spriteSheets.get(_spiteSheetName).animationStates.get(_name);
 		var tempSpriteSheet:ST_SpriteSheet = spriteSheets.get(_spiteSheetName);
@@ -134,6 +141,7 @@ class ST_AnimationManager{
 		return returnRect;
 	}
 	
+	/** No docs yet */
 	public function getLargestBoundForStateByHeight(_spiteSheetName:String,_name:String):Rectangle{
 		var tempState:ST_AnimationState = spriteSheets.get(_spiteSheetName).animationStates.get(_name);
 		var tempSpriteSheet:ST_SpriteSheet = spriteSheets.get(_spiteSheetName);
@@ -149,6 +157,7 @@ class ST_AnimationManager{
 		return returnRect;
 	}
 	
+	/** No docs yet */
 	public function getLargestBoundForStateByArea(_spiteSheetName:String,_name:String):Rectangle{
 		var tempState:ST_AnimationState = spriteSheets.get(_spiteSheetName).animationStates.get(_name);
 		var tempSpriteSheet:ST_SpriteSheet = spriteSheets.get(_spiteSheetName);
@@ -164,6 +173,7 @@ class ST_AnimationManager{
 		return returnRect;
 	}
 	
+	/** No docs yet */
 	public function getSmallestBoundForStateByWidth(_spiteSheetName:String,_name:String):Rectangle{
 		var tempState:ST_AnimationState = spriteSheets.get(_spiteSheetName).animationStates.get(_name);
 		var tempSpriteSheet:ST_SpriteSheet = spriteSheets.get(_spiteSheetName);
@@ -179,6 +189,7 @@ class ST_AnimationManager{
 		return returnRect;
 	}
 	
+	/** No docs yet */
 	public function getSmallestBoundForStateByHeight(_spiteSheetName:String,_name:String):Rectangle{
 		var tempState:ST_AnimationState = spriteSheets.get(_spiteSheetName).animationStates.get(_name);
 		var tempSpriteSheet:ST_SpriteSheet = spriteSheets.get(_spiteSheetName);
@@ -194,6 +205,7 @@ class ST_AnimationManager{
 		return returnRect;
 	}
 	
+	/** No docs yet */
 	public function getSmallestBoundForStateByArea(_spiteSheetName:String,_name:String):Rectangle{
 		var tempState:ST_AnimationState = spriteSheets.get(_spiteSheetName).animationStates.get(_name);
 		var tempSpriteSheet:ST_SpriteSheet = spriteSheets.get(_spiteSheetName);
@@ -209,18 +221,24 @@ class ST_AnimationManager{
 		return returnRect;
 	}
 	
+	/** Sets the current animation state to the given frame
+	 * @param	_frame	Frame to set to  - 0 based
+	 */
 	public function setCurrentFrame(_frame:Int) {
 		currentSpriteSheet.currentState.setCurrentFrame(_frame);
 	}
 	
+	/** Resets the current animation state to frame 0 (argument doesn't do anything yet) */
 	public function reset(name:String) {
 		currentSpriteSheet.currentState.setCurrentFrame(0);
 	}
 	
+	/** No docs yet */
 	public function setFrameRate(_frameRate:Int) {
 		currentSpriteSheet.currentState.frameRate = _frameRate;
 	}
 	
+	/** No docs yet */
 	public function setFrameRateForState(_spriteSheetName:String, _stateName:String, _frameRate:Int) {
 		spriteSheets.get(_spriteSheetName).animationStates.get(_stateName).frameRate = _frameRate;
 	}
