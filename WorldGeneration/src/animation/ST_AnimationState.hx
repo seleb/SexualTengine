@@ -24,21 +24,18 @@ class ST_AnimationState{
 	}
 	
 	/** No docs yet */
-	public function getCurrentFrame()
-	{
+	public function getCurrentFrame(){
+		return frames[currentFrame];
+	}
+	public function incrementFrames(){
 		frameCounter++;
-		
-		if (frameCounter >= frameRate)
-		{
+		if (frameCounter >= frameRate){
 			frameCounter = 0;
 			currentFrame++;
-			if (currentFrame >= frames.length )
-			{
+			if (currentFrame >= frames.length ){
 				currentFrame = 0;
 			}
 		}
-		
-		return frames[currentFrame];
 	}
 	
 	/** No docs yet */

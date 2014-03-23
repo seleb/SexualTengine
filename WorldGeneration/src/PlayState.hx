@@ -62,12 +62,10 @@ class PlayState extends Sprite{
 		
 		//framerate
 		if (ST_GeneralInput.primary(0,true)) {
-			//player.animation.setFrameRate(player.animation.getFrameRate()+1);
-			player.animation.pauseAnimation(0,"up");
+			player.animation.setFrameRate(player.animation.getFrameRate()+1);
 		}
 		if (ST_GeneralInput.secondary(0,true)) {
-			//player.animation.setFrameRate(player.animation.getFrameRate()-1);
-			player.animation.pauseAnimation(0,"down");
+			player.animation.setFrameRate(player.animation.getFrameRate()-1);
 		}
 		
 		//collision

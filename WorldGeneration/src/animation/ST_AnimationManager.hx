@@ -74,18 +74,28 @@ class ST_AnimationManager{
 			currentSpriteSheet = spriteSheets.get(_spriteSheetName);
 		}
 		currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
+		staticDraw();
 	}
 	
 	/** 
-	 * This method is used to draw the frame from the current sprite sheet's current animation state.
+	 * This method is used to draw the frame from the current sprite sheet's current animation state <strong>in the main game loop</strong>.
 	 * Each time we call draw we clear the graphics (otherwise the sprites will just be added on top).
 	 */
 	public function draw(){
-		if(play){
+		if (play) {
+			currentSpriteSheet.currentState.incrementFrames();
 			var data=[0.0, 0.0, currentSpriteSheet.currentState.getCurrentFrame()];
 			graphics.clear();
 			currentSpriteSheet.drawTiles(graphics, data, true);
 		}
+	}
+	
+	/** This method is used to update the frame from the current sprite sheet's current animation state <strong>outside the main game loop, regardless of whether the sprite is paused</strong>.
+	 * <em>Note that this will not increment the frames of the animation state.</em>*/
+	public function staticDraw() {
+		var data=[0.0, 0.0, currentSpriteSheet.currentState.getCurrentFrame()];
+		graphics.clear();
+		currentSpriteSheet.drawTiles(graphics, data, true);
 	}
 	/**
 	 * Sets the animation manager to pause, preventing frame updates to occur. Optionally specify frame to pause at, target state, and host spritesheet (will always switch to these if specified)
@@ -104,7 +114,7 @@ class ST_AnimationManager{
 			}
 			currentSpriteSheet.currentState.setCurrentFrame(_frame);
 		}
-		draw();
+		staticDraw();
 		play = false;
 	}
 	
@@ -240,6 +250,7 @@ class ST_AnimationManager{
 					currentSpriteSheet = spriteSheets.get(_spriteSheetName);
 				}else {
 					spriteSheets.get(_spriteSheetName).animationStates.get(_stateName).setCurrentFrame(_frame);
+					staticDraw();
 					return;
 				}
 			}
@@ -247,10 +258,12 @@ class ST_AnimationManager{
 				currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
 			}else {
 				currentSpriteSheet.animationStates.get(_stateName).setCurrentFrame(_frame);
+				staticDraw();
 				return;
 			}
 		}
 		currentSpriteSheet.currentState.setCurrentFrame(_frame);
+		staticDraw();
 	}
 	/** Resets the current animation state to frame 0
 	 * <em>As far as I can tell this method is redundant (same as setCurrentFrame(0), but maybe it's supposed to do something else?</em>
@@ -274,7 +287,7 @@ class ST_AnimationManager{
 					currentSpriteSheet = spriteSheets.get(_spriteSheetName);
 				}else {
 					spriteSheets.get(_spriteSheetName).animationStates.get(_stateName).frameRate = _frameRate;
-					return; //
+					return;
 				}
 			}
 			if (_switchState) {
