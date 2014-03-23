@@ -29,7 +29,7 @@ class ST_AnimationManager{
 	public function new(_graphics:Graphics) {
 		graphics = _graphics;
 		spriteSheets = new Map();
-		play = true;
+		play = false;
 	}
 	
 	/** No docs yet */
@@ -63,7 +63,7 @@ class ST_AnimationManager{
 		if (currentSpriteSheet.animationStates.exists(_stateName)){
 			currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName); 
 		}else{
-			trace("Animation state '"+_stateName + "' does not exist");
+			trace("ERROR: Animation state '"+_stateName + "' does not exist");
 		}
 	}
 	
@@ -241,6 +241,21 @@ class ST_AnimationManager{
 	/** No docs yet */
 	public function setFrameRate(_frameRate:Int) {
 		currentSpriteSheet.currentState.frameRate = _frameRate;
+	}
+	/**
+	 * Returns framerate for given animation. If none is specified, uses current state/spritesheet
+	 * @param	?_stateName			Name of state to return
+	 * @param	?_spriteSheetName	Name of spritesheet containing state
+	 * @return	Framerate
+	 */
+	public function getFrameRate(?_stateName:String, ?_spriteSheetName:String):Int {
+		if (_spriteSheetName == null) {
+			if (_stateName == null) {
+				return currentSpriteSheet.currentState.frameRate;
+			}
+			return currentSpriteSheet.animationStates[_stateName].frameRate;
+		}
+		return spriteSheets[_spriteSheetName].animationStates[_stateName].frameRate;
 	}
 	
 	/** No docs yet */

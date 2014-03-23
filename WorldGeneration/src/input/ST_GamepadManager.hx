@@ -1,10 +1,10 @@
-package utils;
+package input;
 import flash.events.Event;
 import flash.Lib;
 import openfl.events.JoystickEvent;
 
 /** Class for instantiating individual gamepad objects */
-class Gamepad {
+class ST_Gamepad {
 	/** Currently pressed buttons */
 	public var pressedButtons:Map<Int,Int>;
 	/** Buttons pressed last frame */
@@ -34,7 +34,7 @@ class Gamepad {
 class ST_GamepadManager{
 	public static var numPads:Int = 0;
 	/** Array of gamepads */
-	public static var pads:Map<Int,Gamepad> = new Map<Int,Gamepad>();
+	public static var pads:Map<Int,ST_Gamepad> = new Map<Int,ST_Gamepad>();
 	
 	/** Currently pressed Buttons */
 	private static var pressedButtons:Map<Int,String> = new Map<Int,String>();
@@ -67,7 +67,6 @@ class ST_GamepadManager{
 	}
 	private static function hatMove(evt:JoystickEvent) {
 		pads.get(evt.device).hat = evt.axis;
-		trace(pads.get(evt.device).hat);
 	}
 	private static function ballMove(evt:JoystickEvent) {
 		//I don't actually know what this event covers, apparently nothing on an xbox controller
@@ -87,10 +86,15 @@ class ST_GamepadManager{
 	
 	
 	
-	/** Adds a gamepad to the pads array */
+	/** Adds a gamepad to the pads array 
+	 * @param	device	Controller id, <em>Defaults to ST_GamepadManager.numPads</em>*/
 	public static function addController(device:Int) {
-		pads.set(device, new Gamepad(device));
-		numPads += 1;
+		if (!pads.exists(device)) {
+			pads.set(device, new ST_Gamepad(device));
+			numPads += 1;
+		}else {
+			trace("ERROR: Gamepad device '" + device + "' already exists");
+		}
 	}
 	
 	/**

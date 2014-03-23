@@ -4,6 +4,10 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
 
+import input.ST_GamepadManager;
+import input.ST_Keyboard;
+import input.ST_Mouse;
+
 /**
  * ...
  * @author Sean
@@ -22,25 +26,26 @@ class Main extends Sprite
 	}
 	
 		var playState:PlayState;
-	function init() 
-	{
-		if (inited) return;
-		inited = true;
-
-		// (your code here)
+	function init(){
+		if (inited) {
+			return;
+		}
+		
+		// (initialization code here)
+		stage.addEventListener(Event.ENTER_FRAME, gameLoop);
 		addChild(playState = new PlayState());
-
-		/*while (playState.playing) {
-			
-			
-			
-		}*/
+		
+		//inputs
+		new ST_Keyboard();
+		new ST_Mouse();
+		new ST_GamepadManager();
 		
 		// Stage:
 		// stage.stageWidth x stage.stageHeight @ stage.dpiScale
 		
 		// Assets:
 		// nme.Assets.getBitmapData("img/assetname.jpg");
+		inited = true;
 	}
 
 	function gameLoop(event:Dynamic) {
@@ -60,7 +65,6 @@ class Main extends Sprite
 	{
 		removeEventListener(Event.ADDED_TO_STAGE, added);
 		stage.addEventListener(Event.RESIZE, resize);
-		stage.addEventListener(Event.ENTER_FRAME, gameLoop);
 		#if ios
 		haxe.Timer.delay(init, 100); // iOS 6
 		#else

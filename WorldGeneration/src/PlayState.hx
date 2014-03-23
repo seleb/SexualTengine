@@ -4,12 +4,12 @@ import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
-import openfl.Assets;
-import utils.ST_GamepadManager;
-import utils.KeyboardUtil;
-import utils.PixelArray;
 
-import utils.Pixel;
+import input.ST_Mouse;
+import input.ST_Keyboard;
+import input.ST_GamepadManager;
+import input.ST_GeneralInput;
+
 import utils.ST_Collision;
 
 class PlayState extends Sprite{
@@ -17,12 +17,11 @@ class PlayState extends Sprite{
 	private var player:ST_Sprite;
 	private var terrain:ST_Sprite;
 	
+	private var sprites:Array<ST_Sprite>;
 	
 	public function new() {
 		super();
 		
-		var keyboardUtil:KeyboardUtil = new KeyboardUtil();
-		var gamepadManager:ST_GamepadManager = new ST_GamepadManager();
 		ST_GamepadManager.addController(0);
 		
 		player = new ST_Sprite();
@@ -36,43 +35,45 @@ class PlayState extends Sprite{
 		
 		terrain = new ST_Sprite();
 		terrain.setBitmap("img/terrain.png");
+		
 		addChild(terrain);
 		addChild(player);
+		
+		sprites = new Array<ST_Sprite>();
+		sprites.push(player);
+		sprites.push(terrain);
 	}
 	
 	public function update() {
 		//movement
-		if (KeyboardUtil.isPressed(["S","DOWN"]) || ST_GamepadManager.axisIsAbove(0,"LY",0.5) || ST_GamepadManager.hatIsAbove(0,"Y",0.5)) {
+		if(ST_GeneralInput.down(0)){
 			player.y += 1;
 			player.animation.setAnimationState("down");
 			player.animation.playAnimation();
-		}if (KeyboardUtil.isPressed(["W","UP"]) || ST_GamepadManager.axisIsBelow(0,"LY",-0.5) || ST_GamepadManager.hatIsBelow(0,"Y",-0.5)) {
-			player.y -= 1;
-			player.animation.setAnimationState("up");
-			player.animation.playAnimation();
-		}if (KeyboardUtil.isPressed(["A","LEFT"]) || ST_GamepadManager.axisIsBelow(0,"LX",-0.5) || ST_GamepadManager.hatIsBelow(0,"X",-0.5)) {
+		}if(ST_GeneralInput.left(0)){
 			player.x -= 1;
 			player.animation.setAnimationState("left");
 			player.animation.playAnimation();
-		}if (KeyboardUtil.isPressed(["D","RIGHT"]) || ST_GamepadManager.axisIsAbove(0,"LX",0.5) || ST_GamepadManager.hatIsAbove(0,"X",0.5)) {
+		}if (ST_GeneralInput.right(0)){
 			player.x += 1;
 			player.animation.setAnimationState("right");
+			player.animation.playAnimation();
+		}if (ST_GeneralInput.up(0)){
+			player.y -= 1;
+			player.animation.setAnimationState("up");
 			player.animation.playAnimation();
 		}
 		
 		//framerate
-		if (ST_GamepadManager.isPressed(0, ["A"])) {
-			player.animation.setFrameRate(2);
-		}if (ST_GamepadManager.isPressed(0, ["X"])) {
-			player.animation.setFrameRate(4);
-		}if (ST_GamepadManager.isPressed(0, ["Y"])) {
-			player.animation.setFrameRate(8);
-		}if (ST_GamepadManager.isPressed(0, ["B"])) {
-			player.animation.setFrameRate(16);
+		if (ST_GeneralInput.primary(0,true)) {
+			player.animation.setFrameRate(player.animation.getFrameRate()+1);
+		}
+		if (ST_GeneralInput.secondary(0,true)) {
+			player.animation.setFrameRate(player.animation.getFrameRate()-1);
 		}
 		
 		//collision
-		if (KeyboardUtil.isJustPressed(["SPACE"])) {
+		if (ST_Keyboard.isJustPressed(["SPACE"])) {
 			trace(ST_Collision.checkCollision(player, terrain, 200));
 		}
 		
@@ -80,10 +81,9 @@ class PlayState extends Sprite{
 	}
 	
 	public function draw() {
-		player.animation.draw();
-		/*for (i in 0...this.numChildren) {
-			var child = this.getChildAt(i);
-			
-		}*/
+		//call draw() on the animation manager for all ST_Sprites
+		for (i in sprites) {
+			i.animation.draw();
+		}
 	}
 }

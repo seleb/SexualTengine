@@ -1,4 +1,4 @@
-package utils;
+package input;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.Lib;
@@ -6,7 +6,7 @@ import flash.ui.Keyboard;
 import Map;
 
 /** Utility class for keyboard input. <strong>Requires that a KeyboardUtil object be initialized before the static members will be of any use.</strong> */
-class KeyboardUtil{
+class ST_Keyboard{
 	
 	/** Currently pressed keys */
 	private static var pressedKeys:Map<Int,Int> = new Map<Int,Int>();
@@ -17,7 +17,7 @@ class KeyboardUtil{
 	/** Last key released */
     private static var lastKeyUp:Int;
 	
-	/** Access flash key codes using strings <em>(Only WASD, arrows, and space because I'm too lazy to do the rest)</em> */
+	/** Access flash key codes using strings <em>(Only WASD, XZ, arrows, and space because I'm too lazy to do the rest)</em> */
 	public static var keyStrings:Map < String, Int > = [
 	"LEFT"	=>	37,
 	"RIGHT"	=>	39,
@@ -27,13 +27,15 @@ class KeyboardUtil{
 	"A"		=>	65,
 	"S"		=>	83,
 	"D"		=>	68, 
+	"X"		=>	88,
+	"Z"		=>	90,
 	"SPACE"	=>	32];
 	
 	/** Attaches event listeners so that the static stuff actually works. */
 	public function new(){
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, KeyboardUtil.keyDown);
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, KeyboardUtil.keyUp);
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, KeyboardUtil.clearJust);
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, ST_Keyboard.keyDown);
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, ST_Keyboard.keyUp);
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, ST_Keyboard.clearJust);
 	}
 	
 	/** Adds a pressed key to the map of pressedKeys and justPressedKeys. */
