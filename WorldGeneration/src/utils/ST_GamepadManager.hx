@@ -15,6 +15,7 @@ class Gamepad {
     public var lastButtonUp:Int;
 	/** Array of axis positions */
 	public var axes:Array<Float>;
+	public var hat:Array<Float>;
 	/** Controller id */
 	public var device:Int;
 
@@ -24,6 +25,7 @@ class Gamepad {
 		justPressedButtons = new Map<Int,Int>();
 		justReleasedButtons = new Map<Int,Int>();
 		axes = new Array<Float>();
+		hat = new Array<Float>();
 		this.device = device;
 	}
 }
@@ -45,9 +47,10 @@ class ST_GamepadManager{
 		Lib.current.stage.addEventListener(JoystickEvent.BUTTON_DOWN, ST_GamepadManager.buttonDown);
 		Lib.current.stage.addEventListener(JoystickEvent.BUTTON_UP, ST_GamepadManager.buttonUp);
 		Lib.current.stage.addEventListener(JoystickEvent.AXIS_MOVE, ST_GamepadManager.axisMove);
+		Lib.current.stage.addEventListener(JoystickEvent.HAT_MOVE, ST_GamepadManager.hatMove);
+		Lib.current.stage.addEventListener(JoystickEvent.BALL_MOVE, ST_GamepadManager.ballMove);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, ST_GamepadManager.clearJust);
 	}
-	
 	private static function buttonDown(evt:JoystickEvent) {
 		if (!pads.get(evt.device).pressedButtons.exists(evt.id)){
 			pads.get(evt.device).pressedButtons.set(evt.id, evt.id);
@@ -61,6 +64,13 @@ class ST_GamepadManager{
 	}
 	private static function axisMove(evt:JoystickEvent) {
 		pads.get(evt.device).axes = evt.axis;
+	}
+	private static function hatMove(evt:JoystickEvent) {
+		pads.get(evt.device).hat = evt.axis;
+		trace(pads.get(evt.device).hat);
+	}
+	private static function ballMove(evt:JoystickEvent) {
+		//I don't actually know what this event covers, apparently nothing on an xbox controller
 	}
 	
 	/** Clears justPressedButtons and justReleasedButtons on ENTER_FRAME. */
@@ -140,7 +150,7 @@ class ST_GamepadManager{
 	/**
 	 * Compares a given axis on a device to a given threshold
 	 * @param	device		Controller id
-	 * @param	axis		Key for axis array. <em>Use the shortcuts in the XboxControls for this.</em>
+	 * @param	axis		Key for axis array. <em>Use the shortcuts in the XboxAxes for this.</em>
 	 * @param	threshold	Threshold to check axis against. Values 0 to 1.
 	 * @return	True if axis is below the given thershold for the device, false otherwise
 	 */
@@ -150,16 +160,36 @@ class ST_GamepadManager{
 	/**
 	 * Compares a given axis on a device to a given threshold
 	 * @param	device		Controller id
-	 * @param	axis		Key for axis array. <em>Use the shortcuts in the XboxControls for this.</em>
+	 * @param	axis		Key for axis array. <em>Use the shortcuts in the XboxAxes for this.</em>
 	 * @param	threshold	Threshold to check axis against. Values 0 to 1.
 	 * @return	True if axis is above the given thershold for the device, false otherwise
 	 */
 	public static function axisIsAbove(device:Int, axis:String, threshold:Float):Bool{
 		return pads.get(device).axes[XboxAxes[axis]] > threshold;
 	}
+	/**
+	 * Compares a hat on a device to a given threshold
+	 * @param	device		Controller id
+	 * @param	axis		Key for hat array. <em>Use the shortcuts in the XboxHat for this.</em>
+	 * @param	threshold	Threshold to check hat against. Values 0 to 1.
+	 * @return	True if hat is below the given thershold for the device, false otherwise
+	 */
+	public static function hatIsBelow(device:Int, axis:String, threshold:Float):Bool{
+		return pads.get(device).hat[XboxHat[axis]] < threshold;
+	}
+	/**
+	 * Compares a hat on a device to a given threshold
+	 * @param	device		Controller id
+	 * @param	axis		Key for hat array. <em>Use the shortcuts in the XboxHat for this.</em>
+	 * @param	threshold	Threshold to check hat against. Values 0 to 1.
+	 * @return	True if hat is above the given thershold for the device, false otherwise
+	 */
+	public static function hatIsAbove(device:Int, axis:String, threshold:Float):Bool{
+		return pads.get(device).hat[XboxHat[axis]] > threshold;
+	}
 	
 	
-	/** Contains A, B, X, Y, L1, R1, SELECT, START, L3, R3 */
+	/** Contains A, B, X, Y, L1, R1, SELECT, START, L3, R3. <em>L3 and R3 are when you press on the sticks.</em>*/
 	public static var XboxButtons:Map<String, Int> = [
 		"A"			=>	0,
 		"B"			=>	1,
@@ -171,11 +201,15 @@ class ST_GamepadManager{
 		"START"		=>	7,
 		"L3"		=>	8,
 		"R3"		=>	9];
-	/** Contains LX, LY, RX, RY, TRIGGERS */
+	/** Contains LX, LY, RX, RY, TRIGGERS. */
 	public static var XboxAxes:Map<String, Int> = [
 		"LX"		=>	0,
 		"LY"		=>	1,
 		"RX"		=>	4,
 		"RY"		=>	3,
 		"TRIGGERS"	=>	2];
+	/** Contains X, Y. <em>The hat is the d-pad.</em> */
+	public static var XboxHat:Map<String, Int> = [
+		"X"		=>	0,
+		"Y"		=>	1];
 }
