@@ -5,6 +5,7 @@ import flash.display.Sprite;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import openfl.Assets;
+import utils.ST_GamepadManager;
 import utils.KeyboardUtil;
 import utils.PixelArray;
 
@@ -20,7 +21,9 @@ class PlayState extends Sprite{
 	public function new() {
 		super();
 		
-		var keys:KeyboardUtil = new KeyboardUtil();
+		var keyboardUtil:KeyboardUtil = new KeyboardUtil();
+		var gamepadManager:ST_GamepadManager = new ST_GamepadManager();
+		ST_GamepadManager.addController(0);
 		
 		player = new ST_Sprite();
 		player.setBitmap("img/playerHead.png");
@@ -35,23 +38,38 @@ class PlayState extends Sprite{
 	}
 	
 	public function update() {
-		if (KeyboardUtil.isPressed(["S","DOWN"])) {
+		//movement
+		if (KeyboardUtil.isPressed(["S","DOWN"]) || ST_GamepadManager.axisIsAbove(0,"LY",0.5)) {
 			player.y += 1;
 			player.animation.pauseAnimation();
-		}if (KeyboardUtil.isPressed(["W","UP"])) {
+		}if (KeyboardUtil.isPressed(["W","UP"]) || ST_GamepadManager.axisIsBelow(0,"LY",-0.5)) {
 			player.y -= 1;
 			player.animation.playFrom(6);
-		}if (KeyboardUtil.isPressed(["A","LEFT"])) {
+		}if (KeyboardUtil.isPressed(["A","LEFT"]) || ST_GamepadManager.axisIsBelow(0,"LX",-0.5)) {
 			player.x -= 1;
 			player.animation.playAnimation();
-		}if (KeyboardUtil.isPressed(["D","RIGHT"])) {
+		}if (KeyboardUtil.isPressed(["D","RIGHT"]) || ST_GamepadManager.axisIsAbove(0,"LX",0.5)) {
 			player.x += 1;
-		}if (KeyboardUtil.isJustPressed(["SPACE"])) {
+		}
+		
+		//framerate
+		if (ST_GamepadManager.isPressed(0, ["A"])) {
+			player.animation.setFrameRate(2);
+		}if (ST_GamepadManager.isPressed(0, ["X"])) {
+			player.animation.setFrameRate(4);
+		}if (ST_GamepadManager.isPressed(0, ["Y"])) {
+			player.animation.setFrameRate(8);
+		}if (ST_GamepadManager.isPressed(0, ["B"])) {
+			player.animation.setFrameRate(16);
+		}
+		
+		//collision
+		if (KeyboardUtil.isJustPressed(["SPACE"])) {
 			trace(ST_Collision.checkCollision(player, terrain, 200));
 		}
 		
 		player.animation.draw();
-		trace(player.animation.getLargestBoundForStateByWidth("main", "test"));
+		//trace(player.animation.getLargestBoundForStateByWidth("main", "test"));
 	}
 	
 	public function draw() {
