@@ -45,26 +45,31 @@ class ST_AnimationManager{
 		currentSpriteSheet = spriteSheets.get(_name);
 	}
 	
-	/** No docs yet */
-	public function addAnimationState(_spriteSheet:String, _stateName:String, _frames:Array<Int>, _frameRate:Int, _frameWdth:Int, _frameHeight:Int):Void
-	{	
-		spriteSheets.get(_spriteSheet).addAnimationState(_stateName, _frames, _frameRate, _frameWdth, _frameHeight);	
+	/**
+	 * Creates a new animation state
+	 * @param	_spriteSheet	Name of spritesheet
+	 * @param	_stateName		Name for new animation state
+	 * @param	_frames			Array of frames, where the frames are read left-to-right, top-to-bottom from 0
+	 * @param	_frameRate		Default framerate for new animation state
+	 * @param	_frameWidth		Width of individual frames on the sprite sheet
+	 * @param	_frameHeight	Height of individual frames on the sprite sheet
+	 */
+	public function addAnimationState(_spriteSheet:String, _stateName:String, _frames:Array<Int>, _frameRate:Int, _frameWidth:Int, _frameHeight:Int):Void{	
+		spriteSheets.get(_spriteSheet).addAnimationState(_stateName, _frames, _frameRate, _frameWidth, _frameHeight);	
 	}
 	
-	/** No docs yet */
-	public function setAnimationState(_stateName:String)
-	{
-		if (currentSpriteSheet.currentState != null && currentSpriteSheet.currentState != currentSpriteSheet.animationStates.get(_stateName))
-		{
-			currentSpriteSheet.currentState.setCurrentFrame(0);
+	/** Changes the animation state. <em>The current animation stays at the current frame.</em> */
+	public function setAnimationState(_stateName:String) {
+		if (currentSpriteSheet.animationStates.exists(_stateName)){
+			currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName); 
+		}else{
+			trace("Animation state '"+_stateName + "' does not exist");
 		}
-		currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName); 
 	}
 	
 	/** 
-	 * This method is used to draw the framw from the current sprite sheet's current 
-	 * animation state. Each time we call draw we clear the graphics otherwise the 
-	 * sprites will just be added on top.
+	 * This method is used to draw the frame from the current sprite sheet's current animation state.
+	 * Each time we call draw we clear the graphics (otherwise the sprites will just be added on top).
 	 */
 	public function draw()
 	{
@@ -113,7 +118,7 @@ class ST_AnimationManager{
 	 * @param _stateName The name of the animation state to play from the specifyed sprite sheet
 	 * @param _frame The frame to play the animation state from
 	 */
-	public function playStateFrom(_spriteSheetName:String, _stateName:String, _frame:Int){
+	public function playStateFrom(_spriteSheetName:String, _stateName:String, _frame:Int) {
 		play = true;
 		currentSpriteSheet = spriteSheets.get(_spriteSheetName);
 		currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);

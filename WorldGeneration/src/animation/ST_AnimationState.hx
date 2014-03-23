@@ -8,9 +8,7 @@ package animation;
 import flash.display.*;
 import flash.events.*;
 
-class ST_AnimationState
-{
-	
+class ST_AnimationState{
 	public var frames:Array<Int>;
 	private var currentFrame:Int;
 	public var frameRate:Int;
