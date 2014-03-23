@@ -33,16 +33,11 @@ class ST_AnimationManager{
 	}
 	
 	/** No docs yet */
-	public function addSpitesheet(_bitmapPath:String, _name:String, ?_setAsCurrent:Bool = false) {
+	public function addSpriteSheet(_bitmapPath:String, _name:String, ?_setAsCurrent:Bool = false):Void{
 		spriteSheets.set(_name, new ST_SpriteSheet(_bitmapPath));
 		if (_setAsCurrent) {
 			currentSpriteSheet = spriteSheets.get(_name);
 		}
-	}
-	
-	/** No docs yet */
-	public function setCurrentSpriteSheet(_name:String) {
-		currentSpriteSheet = spriteSheets.get(_name);
 	}
 	
 	/**
@@ -58,71 +53,76 @@ class ST_AnimationManager{
 		spriteSheets.get(_spriteSheet).addAnimationState(_stateName, _frames, _frameRate, _frameWidth, _frameHeight);	
 	}
 	
-	/** Changes the animation state. <em>The current animation stays at the current frame.</em> */
-	public function setAnimationState(_stateName:String) {
-		if (currentSpriteSheet.animationStates.exists(_stateName)){
-			currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName); 
-		}else{
-			trace("ERROR: Animation state '"+_stateName + "' does not exist");
+	/**
+	 * Switches the spritesheet.
+	 * <em>The current animation stays at the current frame.</em>
+	 * @param _spriteSheetName	The name of the spriteSheet to switch to
+	 */
+	public function setSpriteSheet(_spriteSheetName:String):Void{
+		currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+	}
+	
+	/**
+	 * Switches the animation state. Optionally specify host spritesheet to switch to as well.
+	 * <em>The current animation stays at the current frame.</em>
+	 * 
+	 * @param _stateName		The name of the animation state to switch to
+	 * @param ?_spriteSheetName	The name of the spriteSheet hosting the animation state (defaults to current)
+	 */
+	public function setAnimationState(_stateName:String, ?_spriteSheetName) {
+		if (_spriteSheetName != null) {
+			currentSpriteSheet = spriteSheets.get(_spriteSheetName);
 		}
+		currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
 	}
 	
 	/** 
 	 * This method is used to draw the frame from the current sprite sheet's current animation state.
 	 * Each time we call draw we clear the graphics (otherwise the sprites will just be added on top).
 	 */
-	public function draw()
-	{
+	public function draw(){
 		if(play){
 			var data=[0.0, 0.0, currentSpriteSheet.currentState.getCurrentFrame()];
 			graphics.clear();
 			currentSpriteSheet.drawTiles(graphics, data, true);
 		}
 	}
-	
-	/** 
-	 * Pauses the current animation state at the given frame
+	/**
+	 * Sets the animation manager to pause, preventing frame updates to occur. Optionally specify frame to pause at, target state, and host spritesheet (will always switch to these if specified)
 	 * 
-	 * @Param _frame The frame to pause at - 0 based
+	 * @param ?_frame			The frame to pause the animation state at - 0 based (defaults to current)
+	 * @param ?_stateName		The name of the animation state to set (defaults to current, requires _frame)
+	 * @param ?_spriteSheetName	The name of the spriteSheet hosting the animation state (defaults to current, requires _frame and _stateName)
 	 */
-	public function pauseAt(_frame:Int) {
-		currentSpriteSheet.currentState.setCurrentFrame(_frame);
-		draw(); 
+	public function pauseAnimation(?_frame:Int, ?_stateName:String, ?_spriteSheetName:String) {
+		if (_frame != null) {
+			if (_stateName != null) {
+				if (_spriteSheetName != null) {
+					currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+				}
+				currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
+			}
+			currentSpriteSheet.currentState.setCurrentFrame(_frame);
+		}
+		draw();
 		play = false;
 	}
 	
-	/** Pauses the animation manager, preventing frame updates */
-	public function pauseAnimation() {
-		play = false;
-	}
-	
-	/** Sets the animation manager to play, causing frame updates to occur */
-	public function playAnimation() {
-		play = true;
-	}
-	
-	/** 
-	 * Plays the current animation state at the given frame
+	/**
+	 * Sets the animation manager to play, causing frame updates to occur. Optionally specify start frame, target state, and host spritesheet
 	 * 
-	 * @Param _frame The frame to pause at - 0 based
+	 * @param ?_frame			The frame to play the animation state from - 0 based (defaults to current)
+	 * @param ?_stateName		The name of the animation state to set (defaults to current)
+	 * @param ?_spriteSheetName	The name of the spriteSheet hosting the animation state (defaults to current)
 	 */
-	public function playFrom(_frame:Int) {
-		play = true;
-		currentSpriteSheet.currentState.setCurrentFrame(_frame);
-	}
-	
-	/** Selects a sprite sheet and animation state, Sets these to the current sprite sheet and 
-	 * animation state and plays from the specified frame.
-	 * 
-	 * @param _spriteSheetName The name of the spriteSheet to play from
-	 * @param _stateName The name of the animation state to play from the specifyed sprite sheet
-	 * @param _frame The frame to play the animation state from
-	 */
-	public function playStateFrom(_spriteSheetName:String, _stateName:String, _frame:Int) {
-		play = true;
-		currentSpriteSheet = spriteSheets.get(_spriteSheetName);
-		currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
-		currentSpriteSheet.currentState.setCurrentFrame(_frame);
+	public function playAnimation(?_frame:Int, ?_stateName:String, ?_spriteSheetName:String) {
+		if (_spriteSheetName != null) {
+			currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+		}if (_stateName != null) {
+			currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
+		}if (_frame != null) {
+			currentSpriteSheet.currentState.setCurrentFrame(_frame);
+		}play = true;
 	}
 	
 	/** No docs yet */
@@ -137,10 +137,10 @@ class ST_AnimationManager{
 		var largest:Float = 0;
 		var returnRect:Rectangle = new Rectangle(0,0,0,0);
 		for (i in tempState.frames) {
-				if (tempSpriteSheet.getTileRect(i).width > largest) {
-					returnRect = tempSpriteSheet.getTileRect(i);
-					largest = tempSpriteSheet.getTileRect(i).width;
-				}
+			if (tempSpriteSheet.getTileRect(i).width > largest) {
+				returnRect = tempSpriteSheet.getTileRect(i);
+				largest = tempSpriteSheet.getTileRect(i).width;
+			}
 		}
 		
 		return returnRect;
@@ -153,10 +153,10 @@ class ST_AnimationManager{
 		var largest:Float = 0;
 		var returnRect:Rectangle= new Rectangle(0,0,0,0);
 		for (i in tempState.frames) {
-				if (tempSpriteSheet.getTileRect(i).height > largest) {
-					returnRect = tempSpriteSheet.getTileRect(i);
-					largest = tempSpriteSheet.getTileRect(i).height;
-				}
+			if (tempSpriteSheet.getTileRect(i).height > largest) {
+				returnRect = tempSpriteSheet.getTileRect(i);
+				largest = tempSpriteSheet.getTileRect(i).height;
+			}
 		}
 		
 		return returnRect;
@@ -169,10 +169,10 @@ class ST_AnimationManager{
 		var largest:Float = 0;
 		var returnRect:Rectangle= new Rectangle(0,0,0,0);
 		for (i in tempState.frames) {
-				if (tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height > largest) {
-					returnRect = tempSpriteSheet.getTileRect(i);
-					largest = tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height;
-				}
+			if (tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height > largest) {
+				returnRect = tempSpriteSheet.getTileRect(i);
+				largest = tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height;
+			}
 		}
 		
 		return returnRect;
@@ -185,10 +185,10 @@ class ST_AnimationManager{
 		var smallest:Float = 0;
 		var returnRect:Rectangle= new Rectangle(0,0,0,0);
 		for (i in tempState.frames) {
-				if (tempSpriteSheet.getTileRect(i).width > smallest) {
-					returnRect = tempSpriteSheet.getTileRect(i);
-					smallest = tempSpriteSheet.getTileRect(i).width;
-				}
+			if (tempSpriteSheet.getTileRect(i).width > smallest) {
+				returnRect = tempSpriteSheet.getTileRect(i);
+				smallest = tempSpriteSheet.getTileRect(i).width;
+			}
 		}
 		
 		return returnRect;
@@ -201,10 +201,10 @@ class ST_AnimationManager{
 		var smallest:Float = 0;
 		var returnRect:Rectangle= new Rectangle(0,0,0,0);
 		for (i in tempState.frames) {
-				if (tempSpriteSheet.getTileRect(i).height > smallest) {
-					returnRect = tempSpriteSheet.getTileRect(i);
-					smallest = tempSpriteSheet.getTileRect(i).height;
-				}
+			if (tempSpriteSheet.getTileRect(i).height > smallest) {
+				returnRect = tempSpriteSheet.getTileRect(i);
+				smallest = tempSpriteSheet.getTileRect(i).height;
+			}
 		}
 		
 		return returnRect;
@@ -217,35 +217,80 @@ class ST_AnimationManager{
 		var smallest:Float = 0;
 		var returnRect:Rectangle= new Rectangle(0,0,0,0);
 		for (i in tempState.frames) {
-				if (tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height > smallest) {
-					returnRect = tempSpriteSheet.getTileRect(i);
-					smallest = tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height;
-				}
+			if (tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height > smallest) {
+				returnRect = tempSpriteSheet.getTileRect(i);
+				smallest = tempSpriteSheet.getTileRect(i).width * tempSpriteSheet.getTileRect(i).height;
+			}
 		}
 		
 		return returnRect;
 	}
-	
-	/** Sets the current animation state to the given frame
-	 * @param	_frame	Frame to set to  - 0 based
+	/**
+	 * Sets the current animation state to the given frame. Optionally specify target state, and host spritesheet
+	 * 
+	 * @param _frame			The frame to set animation state to - 0 based
+	 * @param ?_stateName		The name of the animation state to set (defaults to current)
+	 * @param ?_spriteSheetName	The name of the spriteSheet hosting the animation state (defaults to current)
+	 * @param _switchState		Whether to switch to the optional animation state/spritesheet
 	 */
-	public function setCurrentFrame(_frame:Int) {
+	public function setCurrentFrame(_frame:Int, ?_stateName:String, ?_spriteSheetName:String, _switchState:Bool = true) {
+		if (_stateName != null) {
+			if (_spriteSheetName != null) {
+				if (_switchState) {
+					currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+				}else {
+					spriteSheets.get(_spriteSheetName).animationStates.get(_stateName).setCurrentFrame(_frame);
+					return;
+				}
+			}
+			if(_switchState){
+				currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
+			}else {
+				currentSpriteSheet.animationStates.get(_stateName).setCurrentFrame(_frame);
+				return;
+			}
+		}
 		currentSpriteSheet.currentState.setCurrentFrame(_frame);
 	}
-	
-	/** Resets the current animation state to frame 0 (argument doesn't do anything yet) */
-	public function reset(name:String) {
+	/** Resets the current animation state to frame 0
+	 * <em>As far as I can tell this method is redundant (same as setCurrentFrame(0), but maybe it's supposed to do something else?</em>
+	 * @param name	Doesn't do anything*/
+	public function reset(name:String):Void{
 		currentSpriteSheet.currentState.setCurrentFrame(0);
 	}
 	
-	/** No docs yet */
-	public function setFrameRate(_frameRate:Int) {
+	/**
+	 * Sets the animation manager framerate for current state. Optionally specify target state and host spritesheet
+	 * @param _frameRate		The target framerate
+	 * @param ?_stateName		The name of the animation state to set (defaults to current)
+	 * @param ?_spriteSheetName	The name of the spriteSheet hosting the animation state (defaults to current)
+	 * @param _switchState		Whether to switch to the optional animation state/spritesheet
+	 * 
+	 */
+	public function setFrameRate(_frameRate:Int, ?_stateName:String, ?_spriteSheetName:String, _switchState:Bool = true):Void {
+		if (_stateName != null) {
+			if (_spriteSheetName != null) {
+				if (_switchState) {
+					currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+				}else {
+					spriteSheets.get(_spriteSheetName).animationStates.get(_stateName).frameRate = _frameRate;
+					return; //
+				}
+			}
+			if (_switchState) {
+				currentSpriteSheet.currentState = currentSpriteSheet.animationStates.get(_stateName);
+			}else {
+				currentSpriteSheet.animationStates.get(_stateName).frameRate = _frameRate;
+				return;
+			}
+		}
 		currentSpriteSheet.currentState.frameRate = _frameRate;
 	}
+	
 	/**
-	 * Returns framerate for given animation. If none is specified, uses current state/spritesheet
-	 * @param	?_stateName			Name of state to return
-	 * @param	?_spriteSheetName	Name of spritesheet containing state
+	 * Returns framerate for current state. Optionally specify target state and host spritesheet
+	 * @param	?_stateName			The name of the animation state to get (defaults to current)
+	 * @param	?_spriteSheetName	The name of the spriteSheet hosting the animation state (defaults to current)
 	 * @return	Framerate
 	 */
 	public function getFrameRate(?_stateName:String, ?_spriteSheetName:String):Int {
@@ -256,10 +301,5 @@ class ST_AnimationManager{
 			return currentSpriteSheet.animationStates[_stateName].frameRate;
 		}
 		return spriteSheets[_spriteSheetName].animationStates[_stateName].frameRate;
-	}
-	
-	/** No docs yet */
-	public function setFrameRateForState(_spriteSheetName:String, _stateName:String, _frameRate:Int) {
-		spriteSheets.get(_spriteSheetName).animationStates.get(_stateName).frameRate = _frameRate;
 	}
 }

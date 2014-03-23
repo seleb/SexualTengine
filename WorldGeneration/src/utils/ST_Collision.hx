@@ -27,14 +27,9 @@ class ST_Collision{
 					by = Math.round(y + collRect.y - obj2.y);
 					var a2:UInt = obj2.getBitmap().bitmapData.getPixel32(bx, by);
 					
-					//trace(x,y,StringTools.hex(a1),StringTools.hex(a2));
-					//trace(StringTools.hex(a1 ),StringTools.hex(a2 ));
-					//trace(StringTools.hex(a1 >> 8),StringTools.hex(a2 >> 8));
-					//trace(StringTools.hex(a1 >> 16),StringTools.hex(a2 >>16));
-					//trace(StringTools.hex(a1 >> 24), StringTools.hex(a2 >> 24));
-					//trace(a1 >> 24 & 0xFF, a2 >> 24 & 0xFF);
 					if ((a1 >> 24 & 0xFF) > threshold && (a2 >> 24 & 0xFF) > threshold) {
 						collision = true;
+						
 						break;
 					}
 				}

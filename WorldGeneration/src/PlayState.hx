@@ -26,12 +26,12 @@ class PlayState extends Sprite{
 		
 		player = new ST_Sprite();
 		//player.setBitmap("img/playerHead.png");
-		player.animation.addSpitesheet("img/spritesheet.png", "main", true);
+		player.animation.addSpriteSheet("img/spritesheet.png", "main", true);
 		player.animation.addAnimationState("main", "down",	[0,1,2,3,4,5,6,7], 5, 51, 70);
 		player.animation.addAnimationState("main", "left",	[8,10,11,9,12,13,14,15], 5, 51, 70);
 		player.animation.addAnimationState("main", "right",	[16,18,19,17,20,21,22,23], 5, 51, 70);
-		player.animation.addAnimationState("main", "up",	[24,25,26,27,28,29,30,31], 5, 51, 70);
-		player.animation.playStateFrom("main", "left", 0);
+		player.animation.addAnimationState("main", "up",	[24, 25, 26, 27, 28, 29, 30, 31], 5, 51, 70);
+		player.animation.playAnimation(0, "left", "main");
 		
 		terrain = new ST_Sprite();
 		terrain.setBitmap("img/terrain.png");
@@ -48,28 +48,26 @@ class PlayState extends Sprite{
 		//movement
 		if(ST_GeneralInput.down(0)){
 			player.y += 1;
-			player.animation.setAnimationState("down");
-			player.animation.playAnimation();
+			player.animation.playAnimation(null,"down");
 		}if(ST_GeneralInput.left(0)){
 			player.x -= 1;
-			player.animation.setAnimationState("left");
-			player.animation.playAnimation();
+			player.animation.playAnimation(null,"left");
 		}if (ST_GeneralInput.right(0)){
 			player.x += 1;
-			player.animation.setAnimationState("right");
-			player.animation.playAnimation();
+			player.animation.playAnimation(null,"right");
 		}if (ST_GeneralInput.up(0)){
 			player.y -= 1;
-			player.animation.setAnimationState("up");
-			player.animation.playAnimation();
+			player.animation.playAnimation(null,"up");
 		}
 		
 		//framerate
 		if (ST_GeneralInput.primary(0,true)) {
-			player.animation.setFrameRate(player.animation.getFrameRate()+1);
+			//player.animation.setFrameRate(player.animation.getFrameRate()+1);
+			player.animation.pauseAnimation(0,"up");
 		}
 		if (ST_GeneralInput.secondary(0,true)) {
-			player.animation.setFrameRate(player.animation.getFrameRate()-1);
+			//player.animation.setFrameRate(player.animation.getFrameRate()-1);
+			player.animation.pauseAnimation(0,"down");
 		}
 		
 		//collision
