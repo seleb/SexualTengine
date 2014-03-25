@@ -8,7 +8,9 @@ package animation;
 import animation.ST_AnimationState;
 import flash.display.*;
 import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.events.*;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import openfl.Assets;
 import openfl.display.Tilesheet;
@@ -314,5 +316,16 @@ class ST_AnimationManager{
 			return currentSpriteSheet.animationStates[_stateName].frameRate;
 		}
 		return spriteSheets[_spriteSheetName].animationStates[_stateName].frameRate;
+	}
+	
+	public function getBitmapData(?_spriteSheetName:String):BitmapData {
+		if (_spriteSheetName != null) {
+			return spriteSheets.get(_spriteSheetName).bitmapData;
+		}else {
+			return currentSpriteSheet.bitmapData;
+		}
+	}
+	public function getXY():Point {
+		return currentSpriteSheet.tileCorners[currentSpriteSheet.currentState.getCurrentFrame()];
 	}
 }

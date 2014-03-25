@@ -1,30 +1,34 @@
 package animation;
 
+import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import openfl.Assets;
 import openfl.display.Tilesheet;
 import flash.display.Bitmap;
+import flash.geom.Point;
 
 /**
  * ...
  * @author Ryan
  */
 class ST_SpriteSheet extends Tilesheet{
-
+	public var bitmapData:BitmapData;
 	public var animationStates:Map<String, ST_AnimationState>;
 	public var currentState:ST_AnimationState;
 	private var imageWidth:Int;
 	private var imageHeight:Int;
 	private var addedTiles:Int;
+	public var tileCorners:Array<Point>;
 	
 	/** No docs yet */
 	public function new(_bitmapPath:String) 
 	{
-		super(Assets.getBitmapData(_bitmapPath));
-		var bitmap:Bitmap = new Bitmap(Assets.getBitmapData(_bitmapPath));
-		imageHeight = Math.round(bitmap.height);
-		imageWidth = Math.round(bitmap.width);
+		bitmapData = Assets.getBitmapData(_bitmapPath);
+		super(bitmapData);
+		imageHeight = Math.round(bitmapData.height);
+		imageWidth = Math.round(bitmapData.width);
 		animationStates = new Map();
+		tileCorners = new Array<Point>();
 	}
 	
 	/** No docs yet */
@@ -42,6 +46,7 @@ class ST_SpriteSheet extends Tilesheet{
 		for(i in addedTiles...addedTiles + _frames.length)
 		{
 			tileIds.push(addedTiles);
+			tileCorners.insert(addedTiles, new Point(getTileRect(addedTiles).x, getTileRect(addedTiles).y));
 			addedTiles++;
 		}
 		
