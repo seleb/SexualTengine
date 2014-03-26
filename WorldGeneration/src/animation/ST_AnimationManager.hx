@@ -25,7 +25,7 @@ class ST_AnimationManager{
 	private var graphics:Graphics;
 	private var currentSpriteSheet:ST_SpriteSheet;
 	public var play:Bool;
-	public  var spriteSheets:Map<String,ST_SpriteSheet>;
+	public var spriteSheets:Map<String,ST_SpriteSheet>;
 	
 	/** No docs yet */
 	public function new(_graphics:Graphics) {
@@ -62,6 +62,10 @@ class ST_AnimationManager{
 	 */
 	public function setSpriteSheet(_spriteSheetName:String):Void{
 		currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+	}
+	/** Returns the currentSpriteSheet */
+	public function getSpriteSheet():ST_SpriteSheet{
+		return currentSpriteSheet;
 	}
 	
 	/**

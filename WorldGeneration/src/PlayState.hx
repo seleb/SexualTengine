@@ -69,9 +69,9 @@ class PlayState extends Sprite{
 		}
 		
 		//collision
-		if (ST_Keyboard.isJustPressed(["SPACE"])) {
+		//if (ST_Keyboard.isJustPressed(["SPACE"])) {
 			trace(ST_Collision.checkCollision(player, terrain, 200));
-		}
+		//}
 		
 		//trace(player.animation.getLargestBoundForStateByWidth("main", "test"));
 	}
