@@ -59,8 +59,8 @@ class ST_Mouse {
 		}
 		leftPressed = true;
 	}private static function onLeftMouseUp(evt:MouseEvent):Void {
-			leftPressed = false;
-			leftJustReleased = true;
+		leftPressed = false;
+		leftJustReleased = true;
 	}
 	
 	private static function onRightMouseDown(evt:MouseEvent):Void {
@@ -69,8 +69,8 @@ class ST_Mouse {
 		}
 		rightPressed = true;
 	}private static function onRightMouseUp(evt:MouseEvent):Void {
-			rightPressed = false;
-			rightJustReleased = true;
+		rightPressed = false;
+		rightJustReleased = true;
 	}
 	
 	private static function onMiddleMouseDown(evt:MouseEvent):Void {
@@ -79,8 +79,8 @@ class ST_Mouse {
 		}
 		middlePressed = true;
 	}private static function onMiddleMouseUp(evt:MouseEvent):Void {
-			middlePressed = false;
-			middleJustReleased = true;
+		middlePressed = false;
+		middleJustReleased = true;
 	}
 	
 	private static function onMouseWheel(evt:MouseEvent):Void {
