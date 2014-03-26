@@ -3,8 +3,11 @@ package ;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
+import input.ST_TouchManager;
 
+#if !flash
 import input.ST_GamepadManager;
+#end
 import input.ST_Keyboard;
 import input.ST_Mouse;
 
@@ -37,8 +40,16 @@ class Main extends Sprite
 		
 		//inputs
 		new ST_Keyboard();
-		new ST_Mouse();
-		new ST_GamepadManager();
+		
+		#if mobile
+			new ST_TouchManager();
+		#else
+			new ST_Mouse();
+		#end
+		
+		#if !flash
+			new ST_GamepadManager();
+		#end
 		
 		// Stage:
 		// stage.stageWidth x stage.stageHeight @ stage.dpiScale

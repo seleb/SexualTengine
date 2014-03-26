@@ -1,4 +1,6 @@
 package input;
+
+#if !flash
 import flash.events.Event;
 import flash.Lib;
 import openfl.events.JoystickEvent;
@@ -217,3 +219,5 @@ class ST_GamepadManager{
 		"X"		=>	0,
 		"Y"		=>	1];
 }
+
+#end
