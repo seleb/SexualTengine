@@ -40,12 +40,10 @@ class ST_Physics
 		//Apply the friction after the movement has occured
 		velocity.x *= friction;
 		velocity.y *= friction;
+		acceleration.x *= friction;
+		acceleration.y *= friction;
 		
 		return reutrnPoint;
-	}
-	
-	public function resetAcceleration() {
-		acceleration = new Point(0, 0);
 	}
 	
 	public function applyForce(_trajectory:Point, _magnitude:Float) {

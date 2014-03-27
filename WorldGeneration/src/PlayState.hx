@@ -49,7 +49,7 @@ class PlayState extends Sprite{
 	
 	public function update() {
 		//movement
-		player.movement.resetAcceleration();
+		//player.movement.resetAcceleration();
 		if(ST_GeneralInput.down(0)){
 			player.movement.acceleration.y = 2;
 			player.animation.playAnimation(null,"down");
