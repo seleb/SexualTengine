@@ -2,6 +2,7 @@ package ;
 
 import flash.display.Bitmap;
 import flash.display.Sprite;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 
@@ -51,16 +52,20 @@ class PlayState extends Sprite{
 		//movement
 		//player.movement.resetAcceleration();
 		if(ST_GeneralInput.down(0)){
-			player.movement.acceleration.y = 2;
+			//player.movement.acceleration.y = 2;
+			player.movement.applyForce(new Point(0,2));
 			player.animation.playAnimation(null,"down");
 		}if(ST_GeneralInput.left(0)){
-			player.movement.acceleration.x = -2;
+			//player.movement.acceleration.x = -2;
+			player.movement.applyForce(new Point(-2,0));
 			player.animation.playAnimation(null,"left");
 		}if (ST_GeneralInput.right(0)){
-			player.movement.acceleration.x = 2;
+			//player.movement.acceleration.x = 2;
+			player.movement.applyForce(new Point(2,0));
 			player.animation.playAnimation(null,"right");
 		}if (ST_GeneralInput.up(0)){
-			player.movement.acceleration.y = -2;
+			//player.movement.acceleration.y = -2;
+			player.movement.applyForce(new Point(0,-2));
 			player.animation.playAnimation(null,"up");
 		}
 		player.update();

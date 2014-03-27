@@ -11,7 +11,7 @@ class ST_Physics
 	public var velocity:Point;
 	public var acceleration:Point;
 	public var force:Float;
-	public var appliedForces:Array<Point> ;
+	private var appliedForces:Array<Point> ;
 	public var friction:Float;
 	public var maxVelocity:Point;
 	
@@ -20,7 +20,8 @@ class ST_Physics
 		velocity = new Point(0,0);
 		acceleration = new Point(0, 0);
 		maxVelocity = new Point(0, 0);
-		friction = 0;
+		friction = 0.7;
+		appliedForces = new Array();
 		mass = _mass;
 	}
 	
@@ -43,10 +44,17 @@ class ST_Physics
 		acceleration.x *= friction;
 		acceleration.y *= friction;
 		
+		for (p in appliedForces) {
+			acceleration.x += p.x;
+			acceleration.y += p.y;
+		}
+		
+		appliedForces = new Array();
+		
 		return reutrnPoint;
 	}
 	
-	public function applyForce(_trajectory:Point, _magnitude:Float) {
+	public function applyForce(_trajectory:Point) {
 		appliedForces.push(_trajectory);
 	}
 	
