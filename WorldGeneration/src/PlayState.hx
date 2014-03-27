@@ -46,17 +46,19 @@ class PlayState extends Sprite{
 	
 	public function update() {
 		//movement
+		player.movement.acceleration.x = 0;
+		player.movement.acceleration.y = 0;
 		if(ST_GeneralInput.down(0)){
-			player.y += 1;
+			player.movement.acceleration.y = 1.8;
 			player.animation.playAnimation(null,"down");
 		}if(ST_GeneralInput.left(0)){
-			player.x -= 1;
+			player.movement.acceleration.x = -1.8;
 			player.animation.playAnimation(null,"left");
 		}if (ST_GeneralInput.right(0)){
-			player.x += 1;
+			player.movement.acceleration.x = 1.8;
 			player.animation.playAnimation(null,"right");
 		}if (ST_GeneralInput.up(0)){
-			player.y -= 1;
+			player.movement.acceleration.y = -1.8;
 			player.animation.playAnimation(null,"up");
 		}
 		
@@ -72,6 +74,8 @@ class PlayState extends Sprite{
 		if (ST_Keyboard.isJustPressed(["SPACE"])) {
 			trace(ST_Collision.checkCollision(player, terrain, 200));
 		}
+		
+		player.update();
 		
 		//trace(player.animation.getLargestBoundForStateByWidth("main", "test"));
 	}
