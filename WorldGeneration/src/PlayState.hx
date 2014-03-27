@@ -49,20 +49,21 @@ class PlayState extends Sprite{
 	
 	public function update() {
 		//movement
+		player.movement.resetAcceleration();
 		if(ST_GeneralInput.down(0)){
-			player.y += 1;
+			player.movement.acceleration.y = 2;
 			player.animation.playAnimation(null,"down");
 		}if(ST_GeneralInput.left(0)){
-			player.x -= 1;
+			player.movement.acceleration.x = -2;
 			player.animation.playAnimation(null,"left");
 		}if (ST_GeneralInput.right(0)){
-			player.x += 1;
+			player.movement.acceleration.x = 2;
 			player.animation.playAnimation(null,"right");
 		}if (ST_GeneralInput.up(0)){
-			player.y -= 1;
+			player.movement.acceleration.y = -2;
 			player.animation.playAnimation(null,"up");
 		}
-		
+		player.update();
 		//framerate
 		if (ST_GeneralInput.primary(0,true)) {
 			player.animation.setFrameRate(player.animation.getFrameRate()+1);
