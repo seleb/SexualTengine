@@ -13,8 +13,12 @@ class ST_GeneralInput{
 	 * @param	device	Controller id
 	 * @return	true if generalized input for down is active, false otherwise
 	 */
-	public static function down(device:Int):Bool{
+	public static function down(device:Int):Bool {
+		#if !flash
 		return ST_Keyboard.isPressed(["S", "DOWN"]) || ST_GamepadManager.axisIsAbove(device, "LY", 0.5) || ST_GamepadManager.hatIsAbove(device, "Y", 0.5);
+		#else
+		return ST_Keyboard.isPressed(["S", "DOWN"]);
+		#end
 	}
 	
 	/**
@@ -23,7 +27,11 @@ class ST_GeneralInput{
 	 * @return	true if generalized input for up is active, false otherwise
 	 */
 	public static function up(device:Int):Bool{
+		#if !flash
 		return ST_Keyboard.isPressed(["W", "UP"]) || ST_GamepadManager.axisIsBelow(device, "LY", -0.5) || ST_GamepadManager.hatIsBelow(device, "Y", -0.5);
+		#else
+		return ST_Keyboard.isPressed(["W", "UP"]);
+		#end
 	}
 	
 	/**
@@ -32,7 +40,11 @@ class ST_GeneralInput{
 	 * @return	true if generalized input for left is active, false otherwise
 	 */
 	public static function left(device:Int):Bool {
+		#if !flash
 		return ST_Keyboard.isPressed(["A", "LEFT"]) || ST_GamepadManager.axisIsBelow(device, "LX", -0.5) || ST_GamepadManager.hatIsBelow(device, "X", -0.5);
+		#else
+		return ST_Keyboard.isPressed(["A", "LEFT"]);
+		#end
 	}
 	
 	/**
@@ -41,7 +53,11 @@ class ST_GeneralInput{
 	 * @return	true if generalized input for right is active, false otherwise
 	 */
 	public static function right(device:Int):Bool{
+		#if !flash
 		return ST_Keyboard.isPressed(["D", "RIGHT"]) || ST_GamepadManager.axisIsAbove(device, "LX", 0.5) || ST_GamepadManager.hatIsAbove(device, "X", 0.5);
+		#else
+		return ST_Keyboard.isPressed(["D", "RIGHT"]);
+		#end
 	}
 	
 	
@@ -54,9 +70,17 @@ class ST_GeneralInput{
 	 */
 	public static function primary(device:Int, justOne:Bool):Bool{
 		if (justOne) {
-			return ST_Keyboard.isJustPressed(["Z"]) || ST_GamepadManager.isJustPressed(0,["A"]) || ST_Mouse.leftJustPressed;
+			#if !flash
+			return ST_Keyboard.isJustPressed(["Z"]) || ST_GamepadManager.isJustPressed(0, ["A"]) || ST_Mouse.leftJustPressed;
+			#else
+			return ST_Keyboard.isJustPressed(["Z"]) || ST_Mouse.leftJustPressed;
+			#end
 		}else {
-			return ST_Keyboard.isPressed(["Z"]) || ST_GamepadManager.isPressed(0,["A"]) || ST_Mouse.leftPressed;
+			#if !flash
+			return ST_Keyboard.isPressed(["Z"]) || ST_GamepadManager.isPressed(0, ["A"]) || ST_Mouse.leftPressed;
+			#else
+			return ST_Keyboard.isPressed(["Z"]) || ST_Mouse.leftPressed;
+			#end
 		}
 	}
 	/**
@@ -67,9 +91,17 @@ class ST_GeneralInput{
 	 */
 	public static function secondary(device:Int, justOne:Bool):Bool {
 		if(justOne){
+			#if !flash
 			return ST_Keyboard.isJustPressed(["X"]) || ST_GamepadManager.isJustPressed(0, ["B"]) || ST_Mouse.rightJustPressed;
+			#else
+			return ST_Keyboard.isJustPressed(["X"]) || ST_Mouse.rightJustPressed;
+			#end
 		}else {
+			#if !flash
 			return ST_Keyboard.isPressed(["X"]) || ST_GamepadManager.isPressed(0, ["B"]) || ST_Mouse.rightPressed;
+			#else
+			return ST_Keyboard.isPressed(["X"]) || ST_Mouse.rightPressed;
+			#end
 		}
 	}
 }

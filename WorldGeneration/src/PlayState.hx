@@ -9,6 +9,7 @@ import input.ST_Mouse;
 import input.ST_Keyboard;
 import input.ST_GamepadManager;
 import input.ST_GeneralInput;
+import input.ST_TouchManager;
 
 import utils.ST_Collision;
 
@@ -22,7 +23,9 @@ class PlayState extends Sprite{
 	public function new() {
 		super();
 		
+		#if !flash
 		ST_GamepadManager.addController(0);
+		#end
 		
 		player = new ST_Sprite();
 		//player.setBitmap("img/playerHead.png");
@@ -46,18 +49,17 @@ class PlayState extends Sprite{
 	
 	public function update() {
 		//movement
-		player.movement.resetAcceleration();
 		if(ST_GeneralInput.down(0)){
-			player.movement.acceleration.y = 1.8;
+			player.y += 1;
 			player.animation.playAnimation(null,"down");
 		}if(ST_GeneralInput.left(0)){
-			player.movement.acceleration.x = -1.8;
+			player.x -= 1;
 			player.animation.playAnimation(null,"left");
 		}if (ST_GeneralInput.right(0)){
-			player.movement.acceleration.x = 1.8;
+			player.x += 1;
 			player.animation.playAnimation(null,"right");
 		}if (ST_GeneralInput.up(0)){
-			player.movement.acceleration.y = -1.8;
+			player.y -= 1;
 			player.animation.playAnimation(null,"up");
 		}
 		
@@ -70,12 +72,10 @@ class PlayState extends Sprite{
 		}
 		
 		//collision
-		if (ST_Keyboard.isJustPressed(["SPACE"])) {
-			trace(ST_Collision.checkCollision(player, terrain, 200));
-		}
-		
-		player.update();
-		
+		//if (ST_Keyboard.isJustPressed(["SPACE"])) {
+		//	trace(ST_Collision.checkCollision(player, terrain, 200));
+		//}
+		//trace(ST_TouchManager.touches);
 		//trace(player.animation.getLargestBoundForStateByWidth("main", "test"));
 	}
 	

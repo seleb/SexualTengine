@@ -8,7 +8,9 @@ package animation;
 import animation.ST_AnimationState;
 import flash.display.*;
 import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.events.*;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import openfl.Assets;
 import openfl.display.Tilesheet;
@@ -23,7 +25,7 @@ class ST_AnimationManager{
 	private var graphics:Graphics;
 	private var currentSpriteSheet:ST_SpriteSheet;
 	public var play:Bool;
-	public  var spriteSheets:Map<String,ST_SpriteSheet>;
+	public var spriteSheets:Map<String,ST_SpriteSheet>;
 	
 	/** No docs yet */
 	public function new(_graphics:Graphics) {
@@ -60,6 +62,10 @@ class ST_AnimationManager{
 	 */
 	public function setSpriteSheet(_spriteSheetName:String):Void{
 		currentSpriteSheet = spriteSheets.get(_spriteSheetName);
+	}
+	/** Returns the currentSpriteSheet */
+	public function getSpriteSheet():ST_SpriteSheet{
+		return currentSpriteSheet;
 	}
 	
 	/**
@@ -314,5 +320,16 @@ class ST_AnimationManager{
 			return currentSpriteSheet.animationStates[_stateName].frameRate;
 		}
 		return spriteSheets[_spriteSheetName].animationStates[_stateName].frameRate;
+	}
+	
+	public function getBitmapData(?_spriteSheetName:String):BitmapData {
+		if (_spriteSheetName != null) {
+			return spriteSheets.get(_spriteSheetName).bitmapData;
+		}else {
+			return currentSpriteSheet.bitmapData;
+		}
+	}
+	public function getXY():Point {
+		return currentSpriteSheet.tileCorners[currentSpriteSheet.currentState.getCurrentFrame()];
 	}
 }
