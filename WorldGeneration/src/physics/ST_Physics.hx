@@ -43,7 +43,10 @@ class ST_Physics
 		
 		return reutrnPoint;
 	}
-		
+	
+	public function resetAcceleration() {
+		acceleration = new Point(0, 0);
+	}
 	
 	public function applyForce(_trajectory:Point, _magnitude:Float) {
 		appliedForces.push(_trajectory);
