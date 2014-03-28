@@ -25,7 +25,7 @@ class ST_Sprite extends Sprite{
 			bitmap = new Bitmap();
 		}
 		animation = new ST_AnimationManager(this.graphics);
-		movement = new ST_Physics(60);
+		movement = new ST_Physics();
 	}
 	
 	public function update() {
