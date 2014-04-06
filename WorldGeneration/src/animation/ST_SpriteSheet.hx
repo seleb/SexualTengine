@@ -29,6 +29,7 @@ class ST_SpriteSheet extends Tilesheet{
 		imageWidth = Math.round(bitmapData.width);
 		animationStates = new Map();
 		tileCorners = new Array<Point>();
+		addedTiles = 0;
 	}
 	
 	/** No docs yet */

@@ -33,7 +33,6 @@ class ST_Sprite extends Sprite{
 		var movementVector:Point = movement.calculatePosition();
 		x += movementVector.x;
 		y += movementVector.y;
-		trace(movement.velocity.x);
 	}
 	
 	public function setBitmap(_bitmap:String) {

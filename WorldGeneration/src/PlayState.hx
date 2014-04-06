@@ -1,10 +1,12 @@
 package ;
 
+import camera.ST_Camera;
 import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
+import flash.Lib;
 
 import input.ST_Mouse;
 import input.ST_Keyboard;
@@ -18,6 +20,7 @@ class PlayState extends Sprite{
 	public var playing = true;
 	private var player:ST_Sprite;
 	private var terrain:ST_Sprite;
+	private static var camera:ST_Camera;
 	
 	private var sprites:Array<ST_Sprite>;
 	
@@ -46,6 +49,10 @@ class PlayState extends Sprite{
 		sprites = new Array<ST_Sprite>();
 		sprites.push(player);
 		sprites.push(terrain);
+		
+		camera = new ST_Camera(0, 0, 800, 480, 250, 200);
+		camera.follow(player);
+		
 	}
 	
 	public function update() {
@@ -72,10 +79,13 @@ class PlayState extends Sprite{
 		//framerate
 		if (ST_GeneralInput.primary(0,true)) {
 			player.animation.setFrameRate(player.animation.getFrameRate()+1);
-		}
+		}	
 		if (ST_GeneralInput.secondary(0,true)) {
 			player.animation.setFrameRate(player.animation.getFrameRate()-1);
 		}
+	
+		//scrollRect = new Rectangle(player.x, player.y, 640, 480);
+		scrollRect = camera.getFrame();
 		
 		//collision
 		//if (ST_Keyboard.isJustPressed(["SPACE"])) {
