@@ -7,6 +7,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import flash.Lib;
+import utils.ST_Logger;
 
 import input.ST_Mouse;
 import input.ST_Keyboard;
@@ -52,6 +53,7 @@ class PlayState extends Sprite{
 		
 		camera = new ST_Camera(0, 0, 800, 480, 250, 200);
 		camera.follow(player);
+		ST_Logger.LogMultiple(["ssd",player,camera],true);
 		
 	}
 	
